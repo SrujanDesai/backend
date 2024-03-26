@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Car = require("../models/car");
 
+// Get user profile controller
 const getUserProfile = async (req, res) => {
   try {
     // Fetch user profile
@@ -8,12 +9,15 @@ const getUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    // Return user data
     res.status(200).json({ data: user });
   } catch (error) {
+    // Handle server error
     res.status(500).json({ message: error.message });
   }
 };
 
+// Update user profile controller
 const updateUserProfile = async (req, res) => {
   try {
     // Find the user by Id and Update user profile
@@ -25,14 +29,15 @@ const updateUserProfile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    res
-      .status(200)
-      .json({ message: "User profile updated successfully", data: user });
+    // Return success message along with updated user data
+    res.status(200).json({ message: "User profile updated successfully", data: user });
   } catch (error) {
+    // Handle server error
     res.status(400).json({ message: error.message });
   }
 };
 
+// Book car controller
 const bookCar = async (req, res) => {
   try {
     const { carId, userId } = req.body;
@@ -72,12 +77,15 @@ const bookCar = async (req, res) => {
     user.bookedCars.push(carId);
     await user.save();
 
+    // Return success message
     res.status(200).json({ message: "Car booked successfully" });
   } catch (error) {
+    // Handle server error
     res.status(400).json({ message: error.message });
   }
 };
 
+// Cancel booking controller
 const cancelBooking = async (req, res) => {
   try {
     const { carId, userId } = req.body;
@@ -116,12 +124,15 @@ const cancelBooking = async (req, res) => {
     user.bookedCars.splice(index, 1);
     await user.save();
 
+    // Return success message
     res.status(200).json({ message: "Booking cancelled successfully" });
   } catch (error) {
+    // Handle server error
     res.status(400).json({ message: error.message });
   }
 };
 
+// List user bookings controller
 const listUserBookings = async (req, res) => {
   try {
     const { userId } = req.body;
@@ -134,8 +145,10 @@ const listUserBookings = async (req, res) => {
         .json({ message: "User is not registered, please signup!" });
     }
 
+    // Return user's booked cars
     res.status(200).json({ bookedCars: user.bookedCars });
   } catch (error) {
+    // Handle server error
     res.status(500).json({ message: error.message });
   }
 };

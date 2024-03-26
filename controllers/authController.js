@@ -3,9 +3,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-// Signup
+// User signup controller
 const signup = async (req, res) => {
   try {
+    // Extracting user details from request body
     const { name, email, password, phoneNumber, address } = req.body;
 
     // Check if user already exists
@@ -26,18 +27,22 @@ const signup = async (req, res) => {
       address,
     });
 
+    // Save new user to the database
     await newUser.save();
 
+    // Return success message
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.error(error);
+    // Handle server error
     res.status(500).json({ message: "Registration failed. Please try again." });
   }
 };
 
-// Login
+// User login controller
 const login = async (req, res) => {
   try {
+    // Extracting email and password from request body
     const { email, password } = req.body;
 
     // Check if user exists
@@ -59,6 +64,7 @@ const login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    // Return success message along with user details and token
     res.status(200).send({
       message: "User Login successfully",
       user: {
@@ -73,6 +79,7 @@ const login = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    // Handle server error
     res.status(500).json({ message: "Login failed. Please try again." });
   }
 };
